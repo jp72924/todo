@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class PriotityManager(models.Manager):
@@ -10,7 +11,7 @@ class PriotityManager(models.Manager):
 class Task(models.Model):
 
     class Status(models.TextChoices):
-        SUCESS = 'success', 'Success'
+        SUCCESS = 'success', 'Success'
         PENDING = 'pending', 'Pending'
 
     title = models.CharField(max_length=80)
@@ -20,7 +21,7 @@ class Task(models.Model):
         default=Status.PENDING)
 
     created_at = models.DateField(auto_now_add=True)
-    due_date = models.DateField()
+    due_date = models.DateField(default=timezone.now)
 
     important = models.BooleanField(default=False)
 
