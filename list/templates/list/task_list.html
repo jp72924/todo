@@ -36,8 +36,13 @@
 										<button type="button" class="btn btn-danger" onclick="location.assign('{% url 'task_delete' task.id %}')">Delete</button>
 									</div>
 									<div class="btn-group btn-group-sm p-1">
-										<button type="button" class="btn btn-primary active"><i class="bi bi-check-lg"></i></button>
-										<button type="button" class="btn btn-primary" onclick="location.assign('{% url 'task_mark' task.id %}')">Mark</button>
+										{% if task.status == 'success' %}
+										    <button type="button" class="btn btn-primary active"><i class="bi bi-x-lg"></i></button>
+										    <button type="button" class="btn btn-primary" onclick="location.assign('{% url 'task_toggle' task.id %}')">Unmark</button>
+										{% else %}
+											<button type="button" class="btn btn-outline-primary active"><i class="bi bi-check-lg"></i></button>
+											<button type="button" class="btn btn-outline-primary" onclick="location.assign('{% url 'task_toggle' task.id %}')">Mark</button>
+										{% endif %}
 									</div>
 								</div>
 							</div>

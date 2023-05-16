@@ -24,9 +24,12 @@ def task_create(request):
     return redirect('task_list')
 
 
-def task_mark(request, id):
+def task_toggle(request, id):
     task = get_object_or_404(Task, id=id)
-    task.status = Task.Status.SUCCESS
+    if task.status == Task.Status.SUCCESS:
+        task.status = Task.Status.PENDING
+    else:
+        task.status = Task.Status.SUCCESS
     task.save()
 
     return redirect('task_list')
