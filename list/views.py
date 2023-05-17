@@ -6,8 +6,10 @@ from . models import Task
 
 
 def task_list(request):
-    tasks = Task.objects.all()
-    context = {'tasks': tasks, 'form_action': 'add/'}
+    all_tasks = Task.pending.all()
+    tasks_overdue = [task for task in all_tasks if task.is_overdue()]
+    tasks_pending = list(set(all_tasks) - set(tasks_overdue))
+    context = {'overdue': tasks_overdue, 'pending': tasks_pending, 'form_action': 'add/'}
     return render(request, 'list/task_list.html', context)
 
 

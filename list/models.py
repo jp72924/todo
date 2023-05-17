@@ -2,6 +2,12 @@ from django.db import models
 from django.utils import timezone
 
 
+class PendingManager(models.Manager):
+
+    def get_queryset(self):
+        return super().get_queryset().filter(status=Task.Status.PENDING)
+
+
 class PriotityManager(models.Manager):
 
     def get_queryset(self):
@@ -26,12 +32,21 @@ class Task(models.Model):
     important = models.BooleanField(default=False)
 
     objects = models.Manager()
+    pending = PendingManager()
     priority = PriotityManager()
 
+    def is_overdue(self):
+        now = timezone.now()
+        return self.due_date < now.date()
+
+    def time_left(self):
+        now = timezone.now()
+        return self.due_date - now.date()
+
     class Meta:
-        ordering = ['-due_date']
+        ordering = ['due_date']
         indexes = [
-            models.Index(fields=['-due_date'])
+            models.Index(fields=['due_date'])
         ]
 
     def __str__(self):

@@ -4,7 +4,7 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-10 col-md-6 offset-sm-1 offset-md-3">
-			<div class="container p-0 mt-5 mb-4">
+			<div class="container p-0 mt-5 mb-3">
 				<div class="input-group">
 					<input type="text" class="form-control" id="taskInput">
 					</button>
@@ -12,23 +12,25 @@
 				</div>
 			</div>
 			<div class="container">
-			{% for task in tasks %}
+			{% if overdue %}
+				<h5>Overdue</h5>
+			{% for task in overdue %}
 				<div class="row mb-2">
 					<div class="card">
 						<div class="card-body">
-							<h6 class="card-title"><a class="text-decoration-none" href="#collapse-{{ forloop.counter }}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse-{{ forloop.counter }}">{{ task.title }}</a> <span class="text-secondary m-1" style="font-size: 0.8rem"><i class="bi-clock"></i> {{ task.due_date|date:"Y-m-d" }}</span></h6>
+							<h6 class="card-title"><a class="text-decoration-none" href="#collapse-overdue-{{ forloop.counter }}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse-overdue-{{ forloop.counter }}">{{ task.title }}</a> <span class="text-secondary m-1" style="font-size: 0.8rem"><i class="bi-clock"></i> {{ task.due_date|date:"Y-m-d" }}</span></h6>
 							<div class="container-fluid p-0">
 								{% if task.status == 'success' %}
-									<span class="badge text-bg-primary">Success</span>
+								<span class="badge text-bg-primary">Success</span>
 								{% else %}
-									<span class="badge text-bg-danger">Pending</span>
+								<span class="badge text-bg-danger">Pending</span>
 								{% endif %}
 
 								{% if task.important %}
-									<span class="badge text-bg-warning">Important</span>
+								<span class="badge text-bg-warning">Important</span>
 								{% endif %}
 							</div>
-							<div class="collapse mt-3" id="collapse-{{ forloop.counter }}">
+							<div class="collapse mt-3" id="collapse-overdue-{{ forloop.counter }}">
 								<p class="card-text">{{ task.descrip }}</p>
 								<div class="d-flex justify-content-end">
 									<div class="btn-group btn-group-sm p-1">
@@ -37,11 +39,11 @@
 									</div>
 									<div class="btn-group btn-group-sm p-1">
 										{% if task.status == 'success' %}
-										    <button type="button" class="btn btn-primary active"><i class="bi bi-x-lg"></i></button>
-										    <button type="button" class="btn btn-primary" onclick="location.assign('{% url 'task_toggle' task.id %}')">Unmark</button>
+										<button type="button" class="btn btn-primary active"><i class="bi bi-x-lg"></i></button>
+										<button type="button" class="btn btn-primary" onclick="location.assign('{% url 'task_toggle' task.id %}')">Unmark</button>
 										{% else %}
-											<button type="button" class="btn btn-outline-primary active"><i class="bi bi-check-lg"></i></button>
-											<button type="button" class="btn btn-outline-primary" onclick="location.assign('{% url 'task_toggle' task.id %}')">Mark</button>
+										<button type="button" class="btn btn-outline-primary active"><i class="bi bi-check-lg"></i></button>
+										<button type="button" class="btn btn-outline-primary" onclick="location.assign('{% url 'task_toggle' task.id %}')">Mark</button>
 										{% endif %}
 									</div>
 								</div>
@@ -49,9 +51,54 @@
 						</div>
 					</div>
 				</div>
-			{% empty %}
-				<h5>There are no pending tasks for now</h5>
 			{% endfor %}
+			{% endif %}
+			<br>
+			{% if pending %}
+				<h5>Pending</h5>
+			{% endif %}
+			{% for task in pending %}
+				<div class="row mb-2">
+					<div class="card">
+						<div class="card-body">
+							<h6 class="card-title"><a class="text-decoration-none" href="#collapse-pending-{{ forloop.counter }}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse-pending-{{ forloop.counter }}">{{ task.title }}</a> <span class="text-secondary m-1" style="font-size: 0.8rem"><i class="bi-clock"></i> {{ task.due_date|date:"Y-m-d" }}</span></h6>
+							<div class="container-fluid p-0">
+								{% if task.status == 'success' %}
+								<span class="badge text-bg-primary">Success</span>
+								{% else %}
+								<span class="badge text-bg-danger">Pending</span>
+								{% endif %}
+
+								{% if task.important %}
+								<span class="badge text-bg-warning">Important</span>
+								{% endif %}
+							</div>
+							<div class="collapse mt-3" id="collapse-pending-{{ forloop.counter }}">
+								<p class="card-text">{{ task.descrip }}</p>
+								<div class="d-flex justify-content-end">
+									<div class="btn-group btn-group-sm p-1">
+										<button type="button" class="btn btn-danger active"><i class="bi bi-trash"></i></button>
+										<button type="button" class="btn btn-danger" onclick="location.assign('{% url 'task_delete' task.id %}')">Delete</button>
+									</div>
+									<div class="btn-group btn-group-sm p-1">
+										{% if task.status == 'success' %}
+										<button type="button" class="btn btn-primary active"><i class="bi bi-x-lg"></i></button>
+										<button type="button" class="btn btn-primary" onclick="location.assign('{% url 'task_toggle' task.id %}')">Unmark</button>
+										{% else %}
+										<button type="button" class="btn btn-outline-primary active"><i class="bi bi-check-lg"></i></button>
+										<button type="button" class="btn btn-outline-primary" onclick="location.assign('{% url 'task_toggle' task.id %}')">Mark</button>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+
+			{% if not overdue and not pending %}
+			    <h5>There are no pending tasks for now</h5>
+			{% endif %}
 			</div>
 		</div>
 	</div>
