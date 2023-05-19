@@ -37,11 +37,13 @@ class Task(models.Model):
 
     def is_overdue(self):
         now = timezone.now()
-        return self.due_date < now.date()
+        local_time = timezone.localtime(now)
+        return self.due_date < local_time.date()
 
     def time_left(self):
         now = timezone.now()
-        return self.due_date - now.date()
+        local_time = timezone.localtime(now)
+        return self.due_date - local_time.date()
 
     class Meta:
         ordering = ['due_date']

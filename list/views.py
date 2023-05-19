@@ -15,10 +15,13 @@ def task_list(request):
 
 def task_create(request):
     if request.method == 'POST':
+        now = timezone.now()
+        local_time = timezone.localtime(now)
+
         task = Task()
         task.title = request.POST.get('title')
         task.descrip = request.POST.get('descrip')
-        task.due_date = request.POST.get('due-date') or timezone.now()
+        task.due_date = request.POST.get('due-date') or local_time.date()
         if 'important' in request.POST:
             task.important = True
         task.save()
