@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
-from django.utils import timezone
-from . models import Task
+from .utils import localtime
+from .models import Task
 
 
 def task_list(request):
@@ -14,14 +14,12 @@ def task_list(request):
 
 
 def task_create(request):
+    now = localtime()
     if request.method == 'POST':
-        now = timezone.now()
-        local_time = timezone.localtime(now)
-
         task = Task()
         task.title = request.POST.get('title')
         task.descrip = request.POST.get('descrip')
-        task.due_date = request.POST.get('due-date') or local_time.date()
+        task.due_date = request.POST.get('due-date') or now.date()
         if 'important' in request.POST:
             task.important = True
         task.save()

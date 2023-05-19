@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils import timezone
+from .utils import localtime
 
 
 class PendingManager(models.Manager):
@@ -27,7 +27,7 @@ class Task(models.Model):
         default=Status.PENDING)
 
     created_at = models.DateField(auto_now_add=True)
-    due_date = models.DateField(default=timezone.now)
+    due_date = models.DateField(default=localtime())
 
     important = models.BooleanField(default=False)
 
@@ -36,14 +36,12 @@ class Task(models.Model):
     priority = PriotityManager()
 
     def is_overdue(self):
-        now = timezone.now()
-        local_time = timezone.localtime(now)
-        return self.due_date < local_time.date()
+        now = localtime()
+        return self.due_date < now.date()
 
     def time_left(self):
-        now = timezone.now()
-        local_time = timezone.localtime(now)
-        return self.due_date - local_time.date()
+        now = localtime()
+        return self.due_date - now.date()
 
     class Meta:
         ordering = ['due_date']
