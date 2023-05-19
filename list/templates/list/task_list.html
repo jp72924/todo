@@ -99,7 +99,7 @@
 			{% endfor %}
 
 			{% if not overdue and not pending %}
-			    <h5>There are no pending tasks for now</h5>
+			    <h5>There are no pending tasks for now. <a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" role="button" data-bs-toggle="modal" data-bs-target="#formModal" href="#">Add a task</a></h5>
 			{% endif %}
 			</div>
 		</div>
@@ -118,7 +118,7 @@
 				</div>
 				<div class="modal-body">
 					<div class="form-floating mb-3">
-						<input type="text" class="form-control" id="titleInput" name="title">
+						<input type="text" class="form-control" id="titleInput" name="title" required>
 						<label for="titleInput">Name</label>
 					</div>
 					<div class="form-floating mb-3">
