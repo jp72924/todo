@@ -8,12 +8,6 @@ class PendingManager(models.Manager):
         return super().get_queryset().filter(status=Task.Status.PENDING)
 
 
-class PriotityManager(models.Manager):
-
-    def get_queryset(self):
-        return super().get_queryset().filter(important=True)
-
-
 class Task(models.Model):
 
     class Status(models.TextChoices):
@@ -26,27 +20,26 @@ class Task(models.Model):
         choices=Status.choices,
         default=Status.PENDING)
 
-    created_at = models.DateField(auto_now_add=True)
-    due_date = models.DateField(default=localtime())
+    created_at = models.DateTimeField(auto_now_add=True)
+    end_date = models.DateTimeField(default=localtime())
 
     important = models.BooleanField(default=False)
 
     objects = models.Manager()
     pending = PendingManager()
-    priority = PriotityManager()
 
     def is_overdue(self):
         now = localtime()
-        return self.due_date < now.date()
+        return self.end_date < now
 
     def time_left(self):
         now = localtime()
-        return self.due_date - now.date()
+        return self.end_date - now
 
     class Meta:
-        ordering = ['due_date']
+        ordering = ['end_date']
         indexes = [
-            models.Index(fields=['due_date'])
+            models.Index(fields=['end_date'])
         ]
 
     def __str__(self):

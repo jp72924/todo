@@ -1,0 +1,17 @@
+.secondary-popover {
+  --bs-popover-max-width: 200px;
+  --bs-popover-border-color: var(--bs-secondary);
+  --bs-popover-header-bg: var(--bs-secondary);
+  --bs-popover-header-color: var(--bs-white);
+  --bs-popover-body-padding-x: 1rem;
+  --bs-popover-body-padding-y: .5rem;
+}
+
+.warning-popover {
+  --bs-popover-max-width: 200px;
+  --bs-popover-border-color: var(--bs-warning);
+  --bs-popover-header-bg: var(--bs-warning);
+  --bs-popover-header-color: var(--bs-black);
+  --bs-popover-body-padding-x: 1rem;
+  --bs-popover-body-padding-y: .5rem;
+}
